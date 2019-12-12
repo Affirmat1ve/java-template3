@@ -75,7 +75,7 @@ class UniversalMul {
       return new DenseMatrix(newHeight, newWidth, res);
     } else throw new RuntimeException("Размеры матриц не отвечают матричному уможению.");
   }
-
+/*
   private static SparseMatrix mul(SparseMatrix m1, SparseMatrix m2) {
     if (m1.width == 0 || m2.height == 0 || m1.val == null || m2.val == null) return null;
     if (m1.width == m2.height) {
@@ -103,6 +103,35 @@ class UniversalMul {
       return new SparseMatrix(result, m1.height, m2.width);
     } else throw new RuntimeException("Размеры матриц не верны");
   }
+*/
+private static SparseMatrix mul(SparseMatrix m1, SparseMatrix m2) {
+  if (m1.width == 0 || m2.height == 0 || m1.val == null || m2.val == null) return null;
+  if (m1.width == m2.height) {
+    HashMap<Point, Double> result = new HashMap<>();
+    SparseMatrix tSMtx = m2.transpose();
+    for (Point k : m1.val.keySet()) {
+      for (int i = 0; i < tSMtx.height; i++) {
+        Point p1 = new Point(i, k.y);
+        if (tSMtx.val.containsKey(p1)) {
+          Point p2 = new Point(k.x, i);
+          {
+            double buf;
+            if (result.containsKey(p2)) {
+              buf = result.get(p2) + m1.val.get(k) * tSMtx.val.get(p1);
+              if (buf == 0) result.remove(p2);
+              else result.put(p2, buf);
+            } else {
+              buf = m1.val.get(k) * tSMtx.val.get(p1);
+              result.put(p2, buf);
+            }
+          }
+        }
+      }
+    }
+    return new SparseMatrix(result, m1.height, m2.width);
+  } else throw new RuntimeException("Размеры матриц не верны");
+}
+
 
   static Matrix dmul(Matrix m1, Matrix m2) {
     if (m1.getWidth() != m2.getHeight()) {

@@ -139,7 +139,7 @@ public class SparseMatrix implements Matrix {
   public String toString() {
     if (val == null) throw new RuntimeException("Встречена пустая матрица");
     StringBuilder resBuilder = new StringBuilder();
-    //resBuilder.append('\n');
+    resBuilder.append('\n');
     for (int i = 0; i < height; i++) {
       resBuilder.append('[');
       for (int j = 0; j < width; j++) {
